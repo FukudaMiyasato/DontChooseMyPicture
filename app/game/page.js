@@ -3,9 +3,10 @@ import returnTheme from '../returnTheme';
 const OpenAI = require('openai');
 import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
-
-const theme = returnTheme()
-const themefinal = theme + ''
+//const info = returnTheme()
+const themeING = 'casa'//info[0]
+const themeSPN = 'house'//info[1]
+const promptToIA = 'Representa la siguiente palabra '+themeSPN+' estilo carta de dixit'
 const valorAleatorio = Math.floor(Math.random() * 4);
 
 export default function Game({ searchParams }){
@@ -27,7 +28,7 @@ export default function Game({ searchParams }){
         console.log('inicio la creación de imagenes')
         const response = await openai.images.generate({
             model: "dall-e-2",
-            prompt: themefinal,
+            prompt: promptToIA,
             n: 3,
             size: "1024x1024",
           });
@@ -95,7 +96,10 @@ export default function Game({ searchParams }){
                     router.push("/" );
                 }}
             >{'<'}</button><div className='p-8'>
-          <h1 className='text-center mt-8 mb-10 bg-cyan-100 p-4  rounded-xl font-black text-2xl text-cyan-950'>{theme}</h1>
+          <div className='text-center mt-8 mb-10 bg-cyan-100 p-4  rounded-xl font-black text-2xl text-cyan-950'>
+                <h1>{themeING}</h1>
+                <h2 className='text-sm font-normal'>{"( "+themeSPN+" )"}</h2>
+          </div>
           <ul className='columns-4 gap-8 mx-8 my-4'>
               <li className='bg-cyan-100 rounded-md text-center py-2'>1</li>
               <li className='bg-cyan-100 rounded-md text-center py-2'>2</li>
