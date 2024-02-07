@@ -3,10 +3,13 @@ import returnTheme from '../returnTheme';
 const OpenAI = require('openai');
 import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
-//const info = returnTheme()
-const themeING = 'casa'//info[0]
-const themeSPN = 'house'//info[1]
-const promptToIA = 'Representa la siguiente palabra '+themeSPN+' estilo carta de dixit'
+
+const modeltoUse='dall-e-2'
+const info = returnTheme()
+const themeING = info[0]
+const themeSPN = info[1]
+const style = info[2]
+const promptToIA = 'Dibuja el '+themeSPN+' como si fuera una pintura ' + style;
 const valorAleatorio = Math.floor(Math.random() * 4);
 
 export default function Game({ searchParams }){
@@ -27,7 +30,7 @@ export default function Game({ searchParams }){
         });
         console.log('inicio la creación de imagenes')
         const response = await openai.images.generate({
-            model: "dall-e-2",
+            model: modeltoUse,
             prompt: promptToIA,
             n: 3,
             size: "1024x1024",
@@ -78,7 +81,7 @@ export default function Game({ searchParams }){
     });
     // Aquí puedes llamar a cualquier función o realizar acciones con el valor del input
     const response = await openai.images.generate({
-        model: "dall-e-2",
+        model: modeltoUse,
         prompt: valorInput,
         n: 1,
         size: "1024x1024",
@@ -173,7 +176,7 @@ export default function Game({ searchParams }){
           </ul>
           {showRecomendation ? <div className='my-8 mx-16 text-center rounded-xl bg-gray-100 p-4'>
               <div className='bg-gray-200 rounded-xl p-8 mb-4' >{valorInput}</div>
-              <div className='text-xs'>Talk to the other players about how they would improve the notice</div>
+              <div className='text-xs'>The style used to generate the other images was: <div className='inline-block ml-1 font-bold bg-cyan-100 rounded-2 px-2 py-1'>{style}</div></div>
           </div> : null}
           {mostrarFormulario ?
           <form className='bg-cyan-100 rounded-xl p-2 mt-8 mx-16 flex justify-between items-center' onSubmit={manejarEnvio}>
