@@ -18,10 +18,29 @@ export default function Game({ searchParams }){
     const [url1,setUrl1] = useState('/loading.gif');
     const [url2,setUrl2] = useState('/loading.gif');
     const [url3,setUrl3] = useState('/yourimg.png');
+    const [showOptions,setShowOptions] = useState(false);
     const [classname, setClassname] = useState('border-2 border-cyan-700 rounded-xl');
     const [mostrarFormulario, setMostrarFormulario] = useState(true);
     const [showRecomendation, setShowRecomendation] = useState(false);
     const openaiKey = searchParams.key
+
+    async function createImage(){
+
+        const openai = new OpenAI({
+            apiKey: searchParams.key,
+            dangerouslyAllowBrowser: true,
+        });
+        console.log('inicio la creación de imagenes')
+        const response = await openai.images.generate({
+            model: modeltoUse,
+            prompt: promptToIA,
+            n: 1,
+            size: "1024x1024",
+          });
+          let image_url = response;
+          return image_url
+      }
+    /*
     async function createImage(){
 
         const openai = new OpenAI({
@@ -37,7 +56,7 @@ export default function Game({ searchParams }){
           });
           let image_url = response;
           return image_url
-      }
+      }*/
     //random
     const urlsIniciales = [
         url0,
@@ -56,8 +75,11 @@ export default function Game({ searchParams }){
         async function fetchImageData() {
             const imageUrl = await createImage(); // Asume que createImage es una función asíncrona que retorna la URL de una imagen
             setUrl0(imageUrl.data[0].url);
-            setUrl1(imageUrl.data[1].url);
-            setUrl2(imageUrl.data[2].url);
+            const imageUrl2 = await createImage(); 
+            setUrl1(imageUrl2.data[0].url);
+            const imageUrl3 = await createImage(); 
+            setUrl2(imageUrl3.data[0].url);
+            setShowOptions(true);
         }
         fetchImageData();
     }, []); 
@@ -74,6 +96,7 @@ export default function Game({ searchParams }){
   const manejarEnvio = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página)
     setUrl3('/loading.gif');
+    setShowOptions(false)
     setMostrarFormulario(false);
     const openai = new OpenAI({
         apiKey:searchParams.key,
@@ -86,8 +109,13 @@ export default function Game({ searchParams }){
         n: 1,
         size: "1024x1024",
       });
-      let image_url = await response;
-      setUrl3(image_url.data[0].url);
+      try{
+        let image_url = await response;
+        setUrl3(image_url.data[0].url);
+        setShowOptions(true)}
+      catch(error){
+        console.error("Hubo un error al cargar la imagen: ", error);
+      }
       
   };
   const router = useRouter();
@@ -178,6 +206,7 @@ export default function Game({ searchParams }){
               <div className='bg-gray-200 rounded-xl p-8 mb-4' >{valorInput}</div>
               <div className='text-xs'>The style used to generate the other images was: <div className='inline-block ml-1 font-bold bg-cyan-100 rounded-2 px-2 py-1'>{style}</div></div>
           </div> : null}
+          {showOptions ? <div>
           {mostrarFormulario ?
           <form className='bg-cyan-100 rounded-xl p-2 mt-8 mx-16 flex justify-between items-center' onSubmit={manejarEnvio}>
     <div className="flex-grow">
@@ -203,6 +232,7 @@ export default function Game({ searchParams }){
                   }}
               >NEW</button>
               </div>}
+              </div>:null}
               </div>
         </main>
     )
