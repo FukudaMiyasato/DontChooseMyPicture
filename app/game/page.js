@@ -4,7 +4,7 @@ const OpenAI = require('openai');
 import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
 
-const modeltoUse='dall-e-2'
+const modeltoUse='dall-e-3'
 const info = returnTheme()
 const themeING = info[0]
 const themeSPN = info[1]

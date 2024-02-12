@@ -17,7 +17,9 @@ export default function Home() {
   };
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 c">
+      
       <div className='place-content-center grid'>
+      DALL e 3
       <label>
         <input 
           placeholder="open ai api key" 
