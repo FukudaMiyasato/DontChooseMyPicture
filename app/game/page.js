@@ -4,12 +4,10 @@ const OpenAI = require('openai');
 import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
 
-const modeltoUse='dall-e-2'
+const modeltoUse='dall-e-3'
 const info = returnTheme()
-const themeING = info[0]
-const themeSPN = info[1]
-const style = info[2]
-const promptToIA = 'Dibuja el '+themeSPN+' como si fuera una pintura ' + style;
+const promptToUse = info[0]
+const recomendationToUse = info[1]
 const valorAleatorio = Math.floor(Math.random() * 4);
 
 export default function Game({ searchParams }){
@@ -33,7 +31,7 @@ export default function Game({ searchParams }){
         console.log('inicio la creación de imagenes')
         const response = await openai.images.generate({
             model: modeltoUse,
-            prompt: promptToIA,
+            prompt: promptToUse,
             n: 1,
             size: "1024x1024",
           });
@@ -108,11 +106,8 @@ export default function Game({ searchParams }){
                 onClick={() => {
                     router.push("/" );
                 }}
-            >{'<'}</button><div className='p-8'>
-          <div className='text-center mt-8 mb-10 bg-cyan-100 p-4  rounded-xl font-black text-2xl text-cyan-950'>
-                <h1>{themeING}</h1>
-                <h2 className='text-sm font-normal'>{"( "+themeSPN+" )"}</h2>
-          </div>
+            >{'<'}</button>
+        <div className='p-8'>
           <ul className='columns-4 gap-8 mx-8 my-4'>
               <li className='bg-cyan-100 rounded-md text-center py-2'>1</li>
               <li className='bg-cyan-100 rounded-md text-center py-2'>2</li>
@@ -185,8 +180,19 @@ export default function Game({ searchParams }){
           
           </ul>
           {showRecomendation ? <div className='my-8 mx-16 text-center rounded-xl bg-gray-100 p-4'>
-              <div className='bg-gray-200 rounded-xl p-8 mb-4' >{valorInput}</div>
-              <div className='text-xs'>The style used to generate the other images was: <div className='inline-block ml-1 font-bold bg-cyan-100 rounded-2 px-2 py-1'>{style}</div></div>
+            <div>
+
+            <div className='mb-8 font-medium text-xl grid place-items-center bg-cyan-100 rounded-xl p-2'>TIP :: {recomendationToUse}</div>
+
+            </div>
+            <div className='columns-2'>
+                <div className='mb-2 font-medium text-xs grid place-items-center h-4'>YOUR PROMPT</div>
+                <div className='mb-2 font-medium text-xs grid place-items-center h-4'>COMPUTER PROMPT</div>
+            </div>
+            <div className='columns-2'>
+                <div className='bg-gray-200 rounded-xl grid place-items-center h-20'>{valorInput}</div>
+                <div className='bg-gray-300 rounded-xl grid place-items-center h-20'>{promptToUse}</div>
+            </div>
           </div> : null}
           {showOptions ? <div>
           {mostrarFormulario ?
