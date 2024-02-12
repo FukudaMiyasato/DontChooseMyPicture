@@ -19,7 +19,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24 c">
       
       <div className='place-content-center grid'>
-      DALL e 3
+      <label className="pb-4 bold">DONT CHOOSE MY PICTURE</label>
       <label>
         <input 
           placeholder="open ai api key" 

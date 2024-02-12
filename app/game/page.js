@@ -4,7 +4,7 @@ const OpenAI = require('openai');
 import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
 
-const modeltoUse='dall-e-3'
+const modeltoUse='dall-e-2'
 const info = returnTheme()
 const themeING = info[0]
 const themeSPN = info[1]
@@ -40,24 +40,6 @@ export default function Game({ searchParams }){
           let image_url = response;
           return image_url
       }
-    /*
-    async function createImage(){
-
-        const openai = new OpenAI({
-            apiKey: searchParams.key,
-            dangerouslyAllowBrowser: true,
-        });
-        console.log('inicio la creación de imagenes')
-        const response = await openai.images.generate({
-            model: modeltoUse,
-            prompt: promptToIA,
-            n: 3,
-            size: "1024x1024",
-          });
-          let image_url = response;
-          return image_url
-      }*/
-    //random
     const urlsIniciales = [
         url0,
         url1,
