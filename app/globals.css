@@ -16,3 +16,14 @@
   }
 }
 
+ol li {
+  color: #333; /* Cambia el color del texto */
+  font-size: 12px; /* Tamaño del texto */
+  line-height: 1.6; /* Espaciado entre líneas */
+  margin-bottom: 8px; /* Margen inferior para cada ítem */
+  text-align: left;
+  list-style-type: decimal;
+  padding-left: 10px;
+  margin-left: 20px;
+}
+
