@@ -5,9 +5,9 @@ import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
 
 const modeltoUse='dall-e-3'
-const info = returnTheme()
-const promptToUse = info[0]
-const recomendationToUse = info[1]
+//const info = returnTheme()
+const promptToUse = returnTheme()
+//const recomendationToUse = info[1]
 const valorAleatorio = Math.floor(Math.random() * 4);
 
 export default function Game({ searchParams }){
@@ -20,8 +20,24 @@ export default function Game({ searchParams }){
     const [classname, setClassname] = useState('border-2 border-cyan-700 rounded-xl');
     const [mostrarFormulario, setMostrarFormulario] = useState(true);
     const [showRecomendation, setShowRecomendation] = useState(false);
+    const [tips,setTips] = useState('')
     const openaiKey = searchParams.key
+    
+    //
+    async function createTips() {
 
+        const openai = new OpenAI({
+            apiKey: searchParams.key,
+            dangerouslyAllowBrowser: true,
+        });
+        const completion = await openai.chat.completions.create({
+        messages: [{"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Where was it played?"}],
+        model: "gpt-3.5-turbo",
+        });
+        setTips(completion.choices[0]);
+    }
+    //
     async function createImage(){
 
         const openai = new OpenAI({
@@ -92,6 +108,7 @@ export default function Game({ searchParams }){
       try{
         let image_url = await response;
         setUrl3(image_url.data[0].url);
+        //createTips();
         setShowOptions(true)}
       catch(error){
         console.error("Hubo un error al cargar la imagen: ", error);
@@ -180,18 +197,17 @@ export default function Game({ searchParams }){
           
           </ul>
           {showRecomendation ? <div className='my-8 mx-16 text-center rounded-xl bg-gray-100 p-4'>
-            <div>
-
-            <div className='mb-8 font-medium text-xl grid place-items-center bg-cyan-100 rounded-xl p-2'>TIP :: {recomendationToUse}</div>
-
-            </div>
             <div className='columns-2'>
                 <div className='mb-2 font-medium text-xs grid place-items-center h-4'>YOUR PROMPT</div>
                 <div className='mb-2 font-medium text-xs grid place-items-center h-4'>COMPUTER PROMPT</div>
             </div>
             <div className='columns-2'>
-                <div className='bg-gray-200 rounded-xl grid place-items-center h-20'>{valorInput}</div>
-                <div className='bg-gray-300 rounded-xl grid place-items-center h-20'>{promptToUse}</div>
+                <div className='bg-gray-200 rounded-xl grid place-items-center h-60'>{valorInput}</div>
+                <div className='bg-gray-300 rounded-xl grid place-items-center h-60'>{promptToUse}</div>
+            </div>
+            <div>
+            <div className='mb-8 font-medium text-xl grid place-items-center bg-cyan-100 rounded-xl p-2 my-2'></div>
+            <div>{tips}</div>
             </div>
           </div> : null}
           {showOptions ? <div>
