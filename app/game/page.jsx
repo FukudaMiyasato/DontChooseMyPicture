@@ -5,7 +5,6 @@ const OpenAI = require('openai');
 import { useEffect, useState} from 'react';
 import { useRouter } from "next/navigation";
 
-const modeltoUse='dall-e-3'
 const promptToUse = returnTheme()
 const valorAleatorio = Math.floor(Math.random() * 4);
 
@@ -20,7 +19,8 @@ export default function Game({ searchParams }){
     const [mostrarFormulario, setMostrarFormulario] = useState(true);
     const [showRecomendation, setShowRecomendation] = useState(false);
     const [tips,setTips] = useState('')
-    const openaiKey = searchParams.key
+    const modeltoUse='dall-e-'+searchParams.model
+
     
     //
     
